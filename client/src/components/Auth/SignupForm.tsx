@@ -20,12 +20,12 @@ export default function SignupForm() {
     e.preventDefault();
     await signup(name, email, password);
 
-    const { isAuthenticated } = useAuthStore.getState();
+    const { error } = useAuthStore.getState();
 
-    if(isAuthenticated) {
+    if(!error){
       navigate({ to: "/login"});
     }
-
+    
   }
 
   function togglePasswordVisibility() {

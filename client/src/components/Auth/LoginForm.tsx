@@ -90,7 +90,7 @@ export default function LoginForm() {
           disabled={isLoading}
           className="px-6 py-3 bg-purple-800 text-gray-100 rounded-sm hover:bg-purple-700 transition-colors cursor-pointer border border-purple-700 font-medium"
         >
-          {isLoading ? "Signing up ..." : "Sign Up"}
+          {isLoading ? "Signing in ..." : "Login"}
         </button>
       </form>
 
