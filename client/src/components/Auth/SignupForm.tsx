@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/store/authStore";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 export default function SignupForm() {
@@ -74,17 +75,33 @@ export default function SignupForm() {
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-gray-300" htmlFor="password">Password</label>
-          <input 
-            type="text"
-            id="password"
-            required
-            disabled={isLoading}
-            placeholder="john@example.com"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password} 
-            className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              required
+              disabled={isLoading}
+              placeholder="***********"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              disabled={isLoading}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {showPassword ? (
+                <EyeOff className="size-5" />
+              ): (
+                <Eye className="size-5" />
+              )}
+            </button>
+          </div>
+
         </div>
+
         <button 
           type="submit" 
           disabled={isLoading}
