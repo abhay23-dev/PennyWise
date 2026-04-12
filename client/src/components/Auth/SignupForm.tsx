@@ -8,23 +8,23 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
 
   return (
-    <section>
-      <div>
-        <h1>Create Account</h1>
-        <p>Sign up to start tracking your expenses</p>
+    <section className="flex flex-col gap-8 w-full max-w-md mx-auto px-4 py-8 sm:px-0">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold text-gray-100">Create Account</h1>
+        <p className="text-gray-400">Sign up to start tracking your expenses</p>
       </div>
 
-      <form onSubmit={}>
+      <form onSubmit={} className="flex flex-col gap-6">
         {
           error && (
-            <div>
+            <div className="px-4 py-3 bg-red-900/20 border-red-700 rounded-sm text-red-400">
               {error}
             </div>
           )
         }
 
-        <div>
-          <label htmlFor="name">Name</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-300" htmlFor="name">Name</label>
           <input 
             type="text" 
             id="name" 
@@ -35,8 +35,8 @@ export default function SignupForm() {
             value={name}          
           />
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-300" htmlFor="email">Email</label>
           <input 
             type="text"
             id="email"
@@ -47,8 +47,8 @@ export default function SignupForm() {
             value={email} 
           />
         </div>
-        <div>
-          <label htmlFor="password">Password</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-300" htmlFor="password">Password</label>
           <input 
             type="text"
             id="password"
@@ -59,12 +59,16 @@ export default function SignupForm() {
             value={password} 
           />
         </div>
-        <button type="submit" disabled={isLoading}>
+        <button 
+          type="submit" 
+          disabled={isLoading}
+          className="px-6 py-3 bg-purple-800 text-gray-100 rounded-sm hover:bg-purple-700 transition-colors cursor-pointer border border-purple-700 font-medium"
+        >
           {isLoading ? "Signing up ..." : "Sign Up"}
         </button>
       </form>
 
-      <p>Already have an account? <Link to="/login">Login</Link></p>
+      <p className="text-center text-gray-400">Already have an account? <Link to="/login">Login</Link></p>
     </section>
   );
 }
