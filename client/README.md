@@ -72,3 +72,20 @@ export default defineConfig([
 ])
 ```
 
+What is Zustand and why we need it?
+Zustand is used for state management of the application.
+so basically we want to change our UI so we need state management because our website is dynamic not static ..
+what a state does is to hold the history that means if we want to change the UI we need to know the history of UI before 10 seconds or something like that because then only we are able to change it.
+And that state management thing can also be done by React using ContextApi but since we have lot of components so we need something else than ContextApi
+
+So then basically developers have written one library thorough which will implement something that all the shared states are present in one place.
+
+Zustand can be explained as one box where we will have all the shared states and this box can be accessed by anyone but a component can access the states related to itself only..eg-> auth component cannot access the states of expense
+
+Using Zustand we can understand the flow and interpret how and where our application is going to move or what it will do next.
+
+## STORE
+
+In Zustand, we have stores where we store the data ..for example when we get response from the backend. At that time we need to store the data so that we can access it later.
+
+We will create for every functionality separately so that we can find error efficiently our code willbe clean
