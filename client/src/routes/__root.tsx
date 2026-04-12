@@ -1,3 +1,4 @@
+import Navigation from "@/components/Common/Navigation";
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -18,6 +19,7 @@ function RootLayout() {
 
   return (
     <>
+      <Navigation />
       <Outlet />
     </>
   );
