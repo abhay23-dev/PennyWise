@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { useAuthStore } from "@/store/authStore";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 export default function SignupForm() {
@@ -7,6 +8,28 @@ export default function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const {signup, isLoading, error} = useAuthStore();
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    await signup(name, email, password);
+
+    const { isAuthenticated } = useAuthStore.getState();
+
+    if(isAuthenticated) {
+      navigate({ to: "/dashboard"});
+    }
+
+  }
+
+  function togglePasswordVisibility() {
+    setShowPassword((prev) => !prev);
+  }
+
   return (
     <section className="flex flex-col gap-8 w-full max-w-md mx-auto px-4 py-8 sm:px-0">
       <div className="flex flex-col gap-2">
@@ -14,7 +37,7 @@ export default function SignupForm() {
         <p className="text-gray-400">Sign up to start tracking your expenses</p>
       </div>
 
-      <form onSubmit={} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {
           error && (
             <div className="px-4 py-3 bg-red-900/20 border-red-700 rounded-sm text-red-400">
@@ -32,7 +55,8 @@ export default function SignupForm() {
             disabled={isLoading} 
             placeholder="John Doe" 
             onChange={(e) => setName(e.target.value)}
-            value={name}          
+            value={name}  
+            className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"        
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -45,6 +69,7 @@ export default function SignupForm() {
             placeholder="john@example.com"
             onChange={(e) => setEmail(e.target.value)}
             value={email} 
+            className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -57,6 +82,7 @@ export default function SignupForm() {
             placeholder="john@example.com"
             onChange={(e) => setPassword(e.target.value)}
             value={password} 
+            className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"
           />
         </div>
         <button 
