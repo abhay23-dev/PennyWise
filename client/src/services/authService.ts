@@ -19,8 +19,8 @@ export const getProfile = async () => {
   return response.data;
 }
 
-export const updateProfile = async (name?:string, email?:string, password?:string) => {
-  const response = await api.get<ApiResponse<User>>("/profile");
+export const updateProfile = async (data: {name?:string, email?:string, password?:string}) => {
+  const response = await api.put<ApiResponse<User>>("/profile", data);
   return response.data;
 }
 

@@ -1,14 +1,24 @@
 import { TOKEN_KEY } from "@/services/api";
 import { AuthState } from "@/types/auth.types";
 import { create } from "zustand";
-import { signup as signupService, login as loginService, getProfile as getProfileService } from "@/services/authService";
+import {
+  signup as signupService,
+  login as loginService,
+  getProfile as getProfileService,
+  updateProfile as updateProfileService
+} from "@/services/authService";
 import { AxiosError } from "axios";
 
 interface AuthStore extends AuthState {
-  signup: (name:string, email: string, password: string) => Promise<void>,
-  login: (email: string, password: string) => Promise<void>,
-  getProfile: () => Promise<void>,
-  logout: () => void
+  signup: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  getProfile: () => Promise<void>;
+  updateProfile: (data: {
+    name?: string;
+    email?: string;
+    password?: string;
+  }) => Promise<void>;
+  logout: () => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -16,15 +26,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
   token: localStorage.getItem(TOKEN_KEY) || null,
   isLoading: false,
   error: null,
-  isAuthenticated: false, 
+  isAuthenticated: false,
 
-  signup: async (name:string, email: string, password: string) => {
-    set({isLoading: true, error: null});
+  signup: async (name: string, email: string, password: string) => {
+    set({ isLoading: true, error: null });
 
-    try{
-      const response = await signupService({name, email, password});
+    try {
+      const response = await signupService({ name, email, password });
 
-      if(response.data) {
+      if (response.data) {
         const { user } = response.data;
 
         set({
@@ -33,8 +43,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
           isLoading: false,
         });
       }
-    } catch(error: unknown) {
-      const err = error as AxiosError<{error: string}>;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
       set({
         error: err.response?.data?.error,
         isLoading: false,
@@ -44,12 +54,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   login: async (email: string, password: string) => {
-    set({isLoading: true, error: null});
+    set({ isLoading: true, error: null });
 
-    try{
-      const response = await loginService({email, password});
+    try {
+      const response = await loginService({ email, password });
 
-      if(response.data) {
+      if (response.data) {
         const { user, token } = response.data;
 
         localStorage.setItem(TOKEN_KEY, token);
@@ -61,8 +71,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
           isLoading: false,
         });
       }
-    } catch(error: unknown) {
-      const err = error as AxiosError<{error: string}>;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
       set({
         error: err.response?.data?.error,
         isLoading: false,
@@ -73,26 +83,57 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   getProfile: async () => {
     set({
-      isLoading:true
+      isLoading: true,
+      error: null
     });
 
     try {
       const response = await getProfileService();
-      if(response.data) {
+      if (response.data) {
         set({
           user: response.data,
-          isLoading:false,
-          error: null
-        })
+          isLoading: false,
+          error: null,
+        });
       }
-    } catch(error) {
-      const err = error as AxiosError<{error: string}>;
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
 
       set({
         error: err.response?.data?.error,
         isLoading: false,
         isAuthenticated: false,
-      })
+      });
+    }
+  },
+
+  updateProfile: async (data: {
+    name?: string;
+    email?: string;
+    password?: string;
+  }) => {
+    set({
+      isLoading: true,
+      error: null,
+    });
+
+    try {
+      const response = await updateProfileService(data);
+      if (response.data) {
+        set({
+          user: response.data,
+          isLoading: false,
+          error: null,
+        });
+      }
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
+
+      set({
+        error: err.response?.data?.error,
+        isLoading: false,
+        isAuthenticated: false,
+      });
     }
   },
 
@@ -103,10 +144,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
       token: null,
       isAuthenticated: false,
       error: null,
-    })
-  }
-}))
-
+    });
+  },
+}));
 
 //we named it as usexxxx so it will act as hook ...to find the type of data stored in AuthStore we are going to call this hook.
 
