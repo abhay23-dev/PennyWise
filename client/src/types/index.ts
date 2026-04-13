@@ -15,7 +15,6 @@ export interface User {
   email: string;
   createdAt: Date;
   updatedAt: Date;
-
 }
 
 export interface Expense {

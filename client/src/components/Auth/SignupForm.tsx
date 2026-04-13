@@ -2,7 +2,7 @@ import { useAuthStore } from "@/store/authStore";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { FormEvent } from "react";
+
 
 export default function SignupForm() {
 

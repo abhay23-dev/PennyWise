@@ -1,12 +1,13 @@
 import { TOKEN_KEY } from "@/services/api";
 import { AuthState } from "@/types/auth.types";
 import { create } from "zustand";
-import { signup as signupService, login as loginService} from "@/services/authService";
+import { signup as signupService, login as loginService, getProfile as getProfileService } from "@/services/authService";
 import { AxiosError } from "axios";
 
 interface AuthStore extends AuthState {
   signup: (name:string, email: string, password: string) => Promise<void>,
   login: (email: string, password: string) => Promise<void>,
+  getProfile: () => Promise<void>,
   logout: () => void
 }
 
@@ -67,6 +68,31 @@ export const useAuthStore = create<AuthStore>((set) => ({
         isLoading: false,
         isAuthenticated: false,
       });
+    }
+  },
+
+  getProfile: async () => {
+    set({
+      isLoading:true
+    });
+
+    try {
+      const response = await getProfileService();
+      if(response.data) {
+        set({
+          user: response.data,
+          isLoading:false,
+          error: null
+        })
+      }
+    } catch(error) {
+      const err = error as AxiosError<{error: string}>;
+
+      set({
+        error: err.response?.data?.error,
+        isLoading: false,
+        isAuthenticated: false,
+      })
     }
   },
 
