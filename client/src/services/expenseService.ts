@@ -7,7 +7,7 @@ export const createExpense = async (data: {
   category: string,
   date: string,
 }) => {
-  const response = await api.post<ApiResponse<Expense>>("/expense", data);
+  const response = await api.post<ApiResponse<Expense>>("/expenses", data);
 
   return response.data;
 
