@@ -1,4 +1,5 @@
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
+import ExpenseList from "@/components/Expenses/ExpensesList";
 import { useExpenseStore } from "@/store/expenseStore";
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -33,6 +34,10 @@ export default function ExpensesPage() {
           </p>
         </div>
       )}
+
+      {
+        !isLoading && <ExpenseList />
+      }
 
       <ExpenseModal
         isOpen={isModalOpen}
