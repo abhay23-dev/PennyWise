@@ -1,35 +1,61 @@
 import { ExpenseState } from "@/types/expense.types";
 import { create } from "zustand";
-import { createExpense as createExpenseService, getAllExpenses as getAllExpensesService } from "@/services/expenseService";
+import {
+  createExpense as createExpenseService,
+  getAllExpenses as getAllExpensesService,
+} from "@/services/expenseService";
 import { AxiosError } from "axios";
 
 interface ExpenseStore extends ExpenseState {
   clearError: () => void;
   createExpense: (data: {
-    amount: number,
-    description: string,
-    category: string,
-    date: string
+    amount: number;
+    description: string;
+    category: string;
+    date: string;
   }) => Promise<void>;
   getAllExpenses: () => Promise<void>;
-  
+
+  setCategory: (category: string) => void;
+  setSort: (sort: string) => void;
+  clearFilters: () => void;
 }
 
-export const useExpenseStore = create<ExpenseStore>(set => ({
+export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   expenses: [],
   isLoading: false,
   error: null,
   totalCount: 0,
   currentExpense: null,
-  filters: {category: "all", sort: "-date"},
+  filters: { category: "all", sort: "-date" },
 
-  clearError: () => set({error: null}),
+  clearError: () => set({ error: null }),
+
+  setCategory: (category: string) => {
+    set({ filters: { ...get().filters, category } });
+
+    get().getAllExpenses();
+  },
+
+  setSort: (sort: string) => {
+    set({ filters: { ...get().filters, sort } });
+    get().getAllExpenses();
+  },
+
+  clearFilters: () => {
+    set({
+      filters: {
+        category: "all",
+        sort: "-date",
+      },
+    });
+  },
 
   createExpense: async (data: {
-    amount: number,
-    description: string,
-    category: string,
-    date: string
+    amount: number;
+    description: string;
+    category: string;
+    date: string;
   }) => {
     set({
       isLoading: true,
@@ -39,19 +65,19 @@ export const useExpenseStore = create<ExpenseStore>(set => ({
     try {
       const response = await createExpenseService(data);
 
-      if(response.data) {
+      if (response.data) {
         set((state) => ({
           expenses: [...state.expenses, response.data!],
           isLoading: false,
           error: null,
-        }))
+        }));
       }
-    } catch(error) {
-      const err = error as AxiosError<{error: string }>;
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
       set({
         error: err.response?.data?.error,
         isLoading: false,
-      })
+      });
     }
   },
 
@@ -64,19 +90,19 @@ export const useExpenseStore = create<ExpenseStore>(set => ({
     try {
       const response = await getAllExpensesService();
 
-      if(response.data) {
-        set(({
+      if (response.data) {
+        set({
           expenses: response.data,
-          isLoading:false,
+          isLoading: false,
           error: null,
-        }))
+        });
       }
-    } catch(error) {
-      const err = error as AxiosError<{error: string }>;
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
       set({
         error: err.response?.data?.error,
         isLoading: false,
-      })
+      });
     }
-  }
-}))
+  },
+}));
