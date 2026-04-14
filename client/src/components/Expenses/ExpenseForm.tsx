@@ -1,8 +1,13 @@
 import { useExpenseStore } from "@/store/expenseStore";
 import { ExpenseCategory } from "@/types";
+import { getCategoryConfig } from "@/types/CategoryConfig";
 import React, { useState } from "react";
 
-export default function ExpenseForm() {
+interface ExpenseFormProps {
+  onSuccess: () => void;
+}
+
+export default function ExpenseForm({onSuccess}: ExpenseFormProps) {
   const { createExpense, isLoading, error } = useExpenseStore();
 
   const [amount, setAmount] = useState("");
@@ -32,6 +37,10 @@ export default function ExpenseForm() {
       setDescription("");
       setCategory(ExpenseCategory.OTHER);
       setDate(new Date().toISOString().split("T")[0]);
+
+      if(onSuccess){
+        onSuccess();
+      }
     }
   }
 
@@ -106,11 +115,13 @@ export default function ExpenseForm() {
                 onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
                 className="px-4 py-3 bg-purple-950 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors cursor-pointer"
               >
-                {Object.values(ExpenseCategory).map((cat) => (
-                  <option value={cat} key={cat}>
-                    {cat}
-                  </option>
-                ))}
+                {Object.values(ExpenseCategory).map((cat) => {
+
+                  const config = getCategoryConfig(cat);
+                  return (<option value={cat} key={cat}>
+                    {config.emoji} {cat}
+                  </option>)
+                })}
               </select>
             </div>
             <div className="flex flex-col gap-2">
