@@ -34,7 +34,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
             Member Since
           </label>
           <p className="text-lg text-gray-100 font-mono">
-            {formatDate(user.createdAt!)}
+            {formatDate(user.createdAt!)  }
           </p>
         </div>
       </div>
