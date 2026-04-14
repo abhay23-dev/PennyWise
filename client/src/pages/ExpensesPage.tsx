@@ -9,7 +9,7 @@ export default function ExpensesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <main>
+    <main className="bg-slate-950 px-4 py-8 sm:px-8 sm:py-12">
       <div className="border-b border-purple-950 pb-4 mb-4 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-100">Expenses</h1>

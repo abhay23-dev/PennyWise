@@ -10,5 +10,10 @@ export const createExpense = async (data: {
   const response = await api.post<ApiResponse<Expense>>("/expenses", data);
 
   return response.data;
+}
 
+export const getAllExpenses = async () => {
+  const response = await api.get<ApiResponse<Expense[]>>("/expenses");
+
+  return response.data;
 }
