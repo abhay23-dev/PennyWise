@@ -15,7 +15,7 @@ export default function ExpensesPage() {
           <h1 className="text-3xl font-bold text-gray-100">Expenses</h1>
           <p className="text-gray-400 mt-1">Manage and track your expenses</p>
         </div>
-        <button className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
+        <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
           <Plus className="size-5" />
           Add Expense
         </button>

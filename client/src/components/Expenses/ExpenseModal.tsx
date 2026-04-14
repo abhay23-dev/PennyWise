@@ -7,10 +7,9 @@ interface ExpenseModalProps {
 }
 
 export default function ExpenseModal({isOpen, onClose}: ExpenseModalProps) {
+  if(!isOpen) return null;
 
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
-    if(!isOpen) return null;
-
     if(e.target === e.currentTarget){
       onClose();
     }
