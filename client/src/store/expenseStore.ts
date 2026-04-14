@@ -4,6 +4,7 @@ import { createExpense as createExpenseService, getAllExpenses as getAllExpenses
 import { AxiosError } from "axios";
 
 interface ExpenseStore extends ExpenseState {
+  clearError: () => void;
   createExpense: (data: {
     amount: number,
     description: string,
@@ -11,6 +12,7 @@ interface ExpenseStore extends ExpenseState {
     date: string
   }) => Promise<void>;
   getAllExpenses: () => Promise<void>;
+  
 }
 
 export const useExpenseStore = create<ExpenseStore>(set => ({
@@ -20,6 +22,8 @@ export const useExpenseStore = create<ExpenseStore>(set => ({
   totalCount: 0,
   currentExpense: null,
   filters: {category: "all", sort: "-date"},
+
+  clearError: () => set({error: null}),
 
   createExpense: async (data: {
     amount: number,
