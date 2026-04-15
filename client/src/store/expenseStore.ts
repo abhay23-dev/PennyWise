@@ -88,11 +88,28 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
     });
 
     try {
-      const response = await getAllExpensesService();
+
+      const { filters } = get();
+      const queryParams = new URLSearchParams();
+
+      if(filters.category && filters.category !== "all"){
+        queryParams.append("category", filters.category);
+      }
+
+      if(filters.sort){
+        queryParams.append("sort", filters.sort);
+      }
+
+      const queryString = queryParams.toString();
+      const endPoint = queryString ? `/expenses/${queryString}` : "expenses";
+
+
+      const response = await getAllExpensesService(endPoint);
 
       if (response.data) {
         set({
           expenses: response.data,
+          totalCount: response.data.length,
           isLoading: false,
           error: null,
         });

@@ -12,8 +12,8 @@ export const createExpense = async (data: {
   return response.data;
 }
 
-export const getAllExpenses = async () => {
-  const response = await api.get<ApiResponse<Expense[]>>("/expenses");
+export const getAllExpenses = async (endPoint: string) => {
+  const response = await api.get<ApiResponse<Expense[]>>(endPoint);
 
   return response.data;
 }
