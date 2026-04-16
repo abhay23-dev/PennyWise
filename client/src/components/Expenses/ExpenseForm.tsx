@@ -1,39 +1,46 @@
 import { useExpenseStore } from "@/store/expenseStore";
-import { ExpenseCategory } from "@/types";
+import { Expense, ExpenseCategory } from "@/types";
 import { getCategoryConfig } from "@/types/CategoryConfig";
 import React, { useState } from "react";
 
 interface ExpenseFormProps {
   onSuccess: () => void;
+  expense: Expense;
 }
 
-export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
-  const { createExpense, isLoading, error } = useExpenseStore();
+export default function ExpenseForm({ onSuccess, expense }: ExpenseFormProps) {
+  const { createExpense, updateExpense, isLoading, error, clearError } = useExpenseStore();
 
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(expense.amount || 0);
+  const [description, setDescription] = useState(expense.description || "");
   const [category, setCategory] = useState<ExpenseCategory>(
-    ExpenseCategory.OTHER,
+    expense.category || ExpenseCategory.OTHER,
   );
   //"2026-01-25T12324551564"
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [date, setDate] = useState(expense.date.toISOString().split("T")[0] || new Date().toISOString().split("T")[0]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    clearError();
 
     const expenseData = {
-      amount: parseFloat(amount),
+      amount,
       description,
       category,
       date,
     };
 
-    await createExpense(expenseData);
+    if(expense) {
+      await updateExpense(expense._id, expenseData);
+    }
+    else {
+      await createExpense(expenseData);
+    }
 
     const { error: currentError } = useExpenseStore.getState();
 
     if (!currentError) {
-      setAmount("");
+      setAmount(0);
       setDescription("");
       setCategory(ExpenseCategory.OTHER);
       setDate(new Date().toISOString().split("T")[0]);
@@ -70,7 +77,7 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
               type="number"
               value={amount}
               id="amount"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(Number(e.target.value))}
               disabled={isLoading}
               required
               min="0"
@@ -145,7 +152,7 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
           disabled={isLoading}
           className="px-6 py-3 bg-purple-950 text-gray-100 rounded-sm border border-purple-950 hover:border-purple-950 hover:bg-transparent transition font-medium"
         >
-          {isLoading ? "Adding ..." : "Add Expense"}
+          {isLoading ? "Adding ..." : expense ? "Save Changes" : "Add Expense"}
         </button>
       </form>
     </div>

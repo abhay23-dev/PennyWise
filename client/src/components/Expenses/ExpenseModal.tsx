@@ -1,14 +1,16 @@
 import { X } from "lucide-react";
 import ExpenseForm from "./ExpenseForm";
 import { useExpenseStore } from "@/store/expenseStore";
+import { Expense } from "@/types";
 
 interface ExpenseModalProps {
 
   isOpen: boolean;
   onClose: () => void;
+  expense: Expense;
 }
 
-export default function ExpenseModal({isOpen, onClose}: ExpenseModalProps) {
+export default function ExpenseModal({isOpen, onClose, expense}: ExpenseModalProps) {
 
   const { clearError } = useExpenseStore();
 
@@ -33,7 +35,7 @@ export default function ExpenseModal({isOpen, onClose}: ExpenseModalProps) {
           <h2 className="text-2xl font-bold text-gray-100">Add new expense</h2>
           <button onClick={handleClose} className="p-2 text-gray-400 hover:text-gray-100 transition-colors rounded-sm hover:bg-slate-800"><X className="size-5" /></button>
         </div>
-        <ExpenseForm onSuccess={handleClose} />
+        <ExpenseForm onSuccess={handleClose} expense={expense} />
       </div>
     </div>
   )

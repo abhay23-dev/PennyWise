@@ -3,6 +3,7 @@ import { create } from "zustand";
 import {
   createExpense as createExpenseService,
   getAllExpenses as getAllExpensesService,
+  updateExpense as updateExpenseService,
 } from "@/services/expenseService";
 import { AxiosError } from "axios";
 
@@ -15,6 +16,13 @@ interface ExpenseStore extends ExpenseState {
     date: string;
   }) => Promise<void>;
   getAllExpenses: () => Promise<void>;
+
+  updateExpense: (id: string, data: {
+    amount: number,
+    description: string,
+    category: string,
+    date: string,
+  }) => Promise<void>;
 
   setCategory: (category: string) => void;
   setSort: (sort: string) => void;
@@ -89,21 +97,19 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
     });
 
     try {
-
       const { filters } = get();
       const queryParams = new URLSearchParams();
 
-      if(filters.category && filters.category !== "all"){
+      if (filters.category && filters.category !== "all") {
         queryParams.append("category", filters.category);
       }
 
-      if(filters.sort){
+      if (filters.sort) {
         queryParams.append("sort", filters.sort);
       }
 
       const queryString = queryParams.toString();
       const endPoint = queryString ? `/expenses?${queryString}` : "expenses";
-
 
       const response = await getAllExpensesService(endPoint);
 
@@ -121,6 +127,31 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
         error: err.response?.data?.error,
         isLoading: false,
       });
+    }
+  },
+
+  updateExpense: async (id: string, data: {
+    amount: number,
+    description: string,
+    category: string,
+    date: string,
+  }) => {
+    set({ error: null, isLoading: true });
+
+    try {
+      const response = await updateExpenseService(id, data);
+
+      set((state) => ({
+        expenses: state.expenses.map(expense => expense._id === id ? response.data! : expense),
+        isLoading: false,
+        error: null
+      }))
+    } catch(error) {
+      const err = error as AxiosError<{error: string}>;
+      set({
+        error: err?.response?.data?.error,
+        isLoading: false
+      })
     }
   },
 }));
