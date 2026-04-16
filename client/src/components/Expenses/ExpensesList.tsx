@@ -3,7 +3,23 @@ import { Package } from "lucide-react";
 import ExpenseCard from "./ExpenseCard";
 
 export default function ExpenseList() {
-  const { expenses } = useExpenseStore();
+  const { expenses, filters } = useExpenseStore();
+
+  function getEmptyMessage() {
+    if (filters.category && filters.category !== "all") {
+      return `No ${filters.category} expenses found`;
+    }
+    return "No expenses found";
+  }
+
+  function getEmptyHint() {
+    if (filters.category && filters.category !== "all") {
+      return "Try changing the category filter or add a new expense";
+    }
+
+    return "Start by adding your first expense";
+  }
+
   return (
     <section className="col-span-4 flex flex-col gap-6">
       {expenses.length === 0 ? (
@@ -11,23 +27,29 @@ export default function ExpenseList() {
           <Package className="size-24 text-gray-700" strokeWidth={1} />
 
           <div className="text-center">
-            <p className="text-xl text-gray-400 font-medium">No expenses found</p>
-            <p className="text-gray-500 mt-1">Start by adding your first expense</p>
+            <p className="text-xl text-gray-400 font-medium">
+              {getEmptyMessage()}
+            </p>
+            <p className="text-gray-500 mt-1">{getEmptyHint()}</p>
           </div>
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-100">Your Expenses</h2>
-            <span className="text-sm text-gray-500">{expenses.length} expense{expenses.length === 1 ? "" : "s"}</span>
+            <h2 className="text-xl font-bold text-gray-100">
+              {filters.category && filters.category !== "all"
+                ? `${filters.category?.charAt(0).toUpperCase + filters.category?.slice(1)} Expenses`
+                : "Your Expenses"}
+            </h2>
+            <span className="text-sm text-gray-500">
+              {expenses.length} expense{expenses.length === 1 ? "" : "s"}
+            </span>
           </div>
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {
-              expenses.map(expense => (
-                <ExpenseCard expense={expense} key={expense._id} />
-              ))
-            }
+            {expenses.map((expense) => (
+              <ExpenseCard expense={expense} key={expense._id} />
+            ))}
           </div>
         </>
       )}
