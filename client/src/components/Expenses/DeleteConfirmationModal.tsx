@@ -3,7 +3,7 @@ import { AlertTriangle } from "lucide-react";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
-  expense: Expense;
+  expense: Expense | undefined;
   onConfirm: () => void;
   onCancel: () => void;
   isDeleting: boolean;

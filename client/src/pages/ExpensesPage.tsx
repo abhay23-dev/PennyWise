@@ -1,3 +1,4 @@
+import DeleteConfirmationModal from "@/components/Expenses/DeleteConfirmationModal";
 import ExpenseFilters from "@/components/Expenses/ExpenseFilters";
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
 import ExpenseList from "@/components/Expenses/ExpensesList";
@@ -15,7 +16,11 @@ export default function ExpensesPage() {
     undefined,
   );
 
-  const [deletingExpense, setDeletingExpense] = useState<Expense | undefined>(undefined);
+  const [deletingExpense, setDeletingExpense] = useState<Expense | undefined>(
+    undefined,
+  );
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     getAllExpenses();
@@ -36,9 +41,27 @@ export default function ExpensesPage() {
     setIsModalOpen(false);
   }
 
-  async function handleDeleteExpense(expense: Expense) {
+  function handleDeleteExpense(expense: Expense) {
     setDeletingExpense(expense);
+    setIsModalOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!deletingExpense) return;
+
     await deleteExpense(deletingExpense._id);
+
+    const { error: deleteError } = useExpenseStore.getState();
+
+    if (!deleteError) {
+      setIsDeleteModalOpen(false);
+      setDeletingExpense(undefined);
+    }
+  }
+
+  function handleCancelDelete() {
+    setIsDeleteModalOpen(false);
+    setDeletingExpense(undefined);
   }
 
   return (
@@ -74,7 +97,10 @@ export default function ExpensesPage() {
         <div className="flex flex-col gap-6">
           <ExpenseFilters />
 
-          <ExpenseList onEdit={handleEditExpense} onDelete={handleDeleteExpense} />
+          <ExpenseList
+            onEdit={handleEditExpense}
+            onDelete={handleDeleteExpense}
+          />
         </div>
       )}
 
@@ -82,6 +108,14 @@ export default function ExpensesPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         expense={editingExpense}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        expense={deletingExpense}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        isDeleting={isLoading}
       />
     </main>
   );
