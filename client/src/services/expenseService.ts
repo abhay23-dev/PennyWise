@@ -28,3 +28,4 @@ export const updateExpense = async (id:string, data: {
 
   return response.data
 }
+

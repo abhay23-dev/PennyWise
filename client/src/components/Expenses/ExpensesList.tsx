@@ -1,8 +1,13 @@
 import { useExpenseStore } from "@/store/expenseStore";
 import { Package } from "lucide-react";
 import ExpenseCard from "./ExpenseCard";
+import { Expense } from "@/types";
 
-export default function ExpenseList() {
+interface ExpenseListProps {
+  onEdit: (expense: Expense) => void;
+}
+
+export default function ExpenseList({onEdit}: ExpenseListProps) {
   const { expenses, filters } = useExpenseStore();
 
   function getEmptyMessage() {
@@ -48,7 +53,7 @@ export default function ExpenseList() {
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {expenses.map((expense) => (
-              <ExpenseCard expense={expense} key={expense._id} />
+              <ExpenseCard expense={expense} key={expense._id} onEdit={onEdit} />
             ))}
           </div>
         </>

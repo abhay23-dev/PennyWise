@@ -3,6 +3,7 @@ import ExpenseModal from "@/components/Expenses/ExpenseModal";
 import ExpenseList from "@/components/Expenses/ExpensesList";
 
 import { useExpenseStore } from "@/store/expenseStore";
+import { Expense } from "@/types";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -10,10 +11,26 @@ export default function ExpensesPage() {
   const { error, isLoading, getAllExpenses } = useExpenseStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<Expense | undefined>(undefined);
 
   useEffect(() => {
     getAllExpenses();
   }, [getAllExpenses])
+
+  function handleEdit(expense: Expense) {
+    setEditingExpense(expense);
+    setIsModalOpen(true);
+  }
+
+  function handleAddExpense() {
+    setEditingExpense(undefined);
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal(){
+    setEditingExpense(undefined);
+    setIsModalOpen(false);
+  }
 
   return (
     <main className="bg-slate-950 px-4 py-8 sm:px-8 sm:py-12">
@@ -22,7 +39,7 @@ export default function ExpensesPage() {
           <h1 className="text-3xl font-bold text-gray-100">Expenses</h1>
           <p className="text-gray-400 mt-1">Manage and track your expenses</p>
         </div>
-        <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
+        <button onClick={handleAddExpense} className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
           <Plus className="size-5" />
           Add Expense
         </button>
@@ -47,14 +64,15 @@ export default function ExpensesPage() {
             <ExpenseFilters />
 
 
-            <ExpenseList />
+            <ExpenseList onEdit={handleEdit} />
           </div>
         )
       }
 
       <ExpenseModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
+        expense={editingExpense}
       />
     </main>
   );

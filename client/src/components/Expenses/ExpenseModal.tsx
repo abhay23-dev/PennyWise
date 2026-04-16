@@ -7,7 +7,7 @@ interface ExpenseModalProps {
 
   isOpen: boolean;
   onClose: () => void;
-  expense: Expense;
+  expense?: Expense;
 }
 
 export default function ExpenseModal({isOpen, onClose, expense}: ExpenseModalProps) {

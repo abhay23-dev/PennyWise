@@ -5,19 +5,19 @@ import React, { useState } from "react";
 
 interface ExpenseFormProps {
   onSuccess: () => void;
-  expense: Expense;
+  expense?: Expense;
 }
 
 export default function ExpenseForm({ onSuccess, expense }: ExpenseFormProps) {
   const { createExpense, updateExpense, isLoading, error, clearError } = useExpenseStore();
 
-  const [amount, setAmount] = useState(expense.amount || 0);
-  const [description, setDescription] = useState(expense.description || "");
+  const [amount, setAmount] = useState(expense?.amount || 0);
+  const [description, setDescription] = useState(expense?.description || "");
   const [category, setCategory] = useState<ExpenseCategory>(
-    expense.category || ExpenseCategory.OTHER,
+    expense?.category || ExpenseCategory.OTHER,
   );
   //"2026-01-25T12324551564"
-  const [date, setDate] = useState(expense.date.toISOString().split("T")[0] || new Date().toISOString().split("T")[0]);
+  const [date, setDate] = useState(expense?.date.toString().split("T")[0] || new Date().toISOString().split("T")[0]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
