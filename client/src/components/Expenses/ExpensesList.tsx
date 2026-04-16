@@ -5,9 +5,10 @@ import { Expense } from "@/types";
 
 interface ExpenseListProps {
   onEdit: (expense: Expense) => void;
+  onDelete: (expense: Expense) => void;
 }
 
-export default function ExpenseList({onEdit}: ExpenseListProps) {
+export default function ExpenseList({ onEdit, onDelete}: ExpenseListProps) {
   const { expenses, filters } = useExpenseStore();
 
   function getEmptyMessage() {
@@ -53,7 +54,7 @@ export default function ExpenseList({onEdit}: ExpenseListProps) {
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {expenses.map((expense) => (
-              <ExpenseCard expense={expense} key={expense._id} onEdit={onEdit} />
+              <ExpenseCard expense={expense} key={expense._id} onEdit={onEdit} onDelete={onDelete} />
             ))}
           </div>
         </>

@@ -4,10 +4,11 @@ import { Calendar, Pencil, Trash2 } from "lucide-react";
 
 interface ExpenseCardProps {
   expense: Expense;
-  onEdit: (expense: Expense) => void
+  onEdit: (expense: Expense) => void;
+  onDelete: (expense: Expense) => void;
 }
 
-export default function ExpenseCard({ expense, onEdit }: ExpenseCardProps) {
+export default function ExpenseCard({ expense, onEdit, onDelete }: ExpenseCardProps) {
   const categoryInfo = getCategoryConfig(expense.category);
 
   const formatDate = (dateString: string) => {
@@ -53,6 +54,7 @@ export default function ExpenseCard({ expense, onEdit }: ExpenseCardProps) {
             <Pencil className="size-4" />
           </button>
           <button
+            onClick={() => onDelete(expense)}
             title="Delete Expense"
             className="p-2 text-gray-500 hover:text-red-400 transition-colors opacity-50"
           >

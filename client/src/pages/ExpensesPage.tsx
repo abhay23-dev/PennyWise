@@ -8,16 +8,20 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ExpensesPage() {
-  const { error, isLoading, getAllExpenses } = useExpenseStore();
+  const { error, isLoading, getAllExpenses, deleteExpense } = useExpenseStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExpense, setEditingExpense] = useState<Expense | undefined>(undefined);
+  const [editingExpense, setEditingExpense] = useState<Expense | undefined>(
+    undefined,
+  );
+
+  const [deletingExpense, setDeletingExpense] = useState<Expense | undefined>(undefined);
 
   useEffect(() => {
     getAllExpenses();
-  }, [getAllExpenses])
+  }, [getAllExpenses]);
 
-  function handleEdit(expense: Expense) {
+  function handleEditExpense(expense: Expense) {
     setEditingExpense(expense);
     setIsModalOpen(true);
   }
@@ -27,9 +31,14 @@ export default function ExpensesPage() {
     setIsModalOpen(true);
   }
 
-  function handleCloseModal(){
+  function handleCloseModal() {
     setEditingExpense(undefined);
     setIsModalOpen(false);
+  }
+
+  async function handleDeleteExpense(expense: Expense) {
+    setDeletingExpense(expense);
+    await deleteExpense(deletingExpense._id);
   }
 
   return (
@@ -39,7 +48,10 @@ export default function ExpensesPage() {
           <h1 className="text-3xl font-bold text-gray-100">Expenses</h1>
           <p className="text-gray-400 mt-1">Manage and track your expenses</p>
         </div>
-        <button onClick={handleAddExpense} className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
+        <button
+          onClick={handleAddExpense}
+          className="flex items-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium"
+        >
           <Plus className="size-5" />
           Add Expense
         </button>
@@ -50,24 +62,21 @@ export default function ExpensesPage() {
         </div>
       )}
 
-      {error && !isLoading && (
+      {/* {error && !isLoading && (
         <div className="flex justify-center items-center py-24">
           <p className="px-4 py-3 bg-red-900/20 border-red-700 rounded-sm text-red-400">
             {error}
           </p>
         </div>
+      )} */}
+
+      {!isLoading && (
+        <div className="flex flex-col gap-6">
+          <ExpenseFilters />
+
+          <ExpenseList onEdit={handleEditExpense} onDelete={handleDeleteExpense} />
+        </div>
       )}
-
-      {
-        !isLoading && (
-          <div className="flex flex-col gap-6">
-            <ExpenseFilters />
-
-
-            <ExpenseList onEdit={handleEdit} />
-          </div>
-        )
-      }
 
       <ExpenseModal
         isOpen={isModalOpen}
