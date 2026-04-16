@@ -1,3 +1,4 @@
+import ExpenseFilters from "@/components/Expenses/ExpenseFilters";
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
 import ExpenseList from "@/components/Expenses/ExpensesList";
 import { useExpenseStore } from "@/store/expenseStore";
@@ -36,7 +37,14 @@ export default function ExpensesPage() {
       )}
 
       {
-        !isLoading && <ExpenseList />
+        !isLoading && (
+          <div className="flex flex-col gap-6">
+            <ExpenseFilters />
+
+
+            <ExpenseList />
+          </div>
+        )
       }
 
       <ExpenseModal
