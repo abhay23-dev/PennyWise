@@ -29,3 +29,8 @@ export const updateExpense = async (id:string, data: {
   return response.data
 }
 
+export const deleteExpense = async (id: string) => {
+  const response = await api.delete<ApiResponse<Expense>>(`/expenses/${id}`);
+
+  return response.data;
+}
