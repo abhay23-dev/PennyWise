@@ -101,7 +101,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       }
 
       const queryString = queryParams.toString();
-      const endPoint = queryString ? `/expenses/${queryString}` : "expenses";
+      const endPoint = queryString ? `/expenses?${queryString}` : "expenses";
 
 
       const response = await getAllExpensesService(endPoint);
