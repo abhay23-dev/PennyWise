@@ -49,6 +49,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
         sort: "-date",
       },
     });
+    get().getAllExpenses();
   },
 
   createExpense: async (data: {
