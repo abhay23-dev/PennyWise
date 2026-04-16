@@ -17,3 +17,14 @@ export const getAllExpenses = async (endPoint: string) => {
 
   return response.data;
 }
+
+export const updateExpense = async (id:string, data: {
+  amount: number,
+  description: string,
+  category: string,
+  date: string
+}) => {
+  const response = await api.put<ApiResponse<Expense>>(`/expenses/${id}`, data);
+
+  return response.data
+}
