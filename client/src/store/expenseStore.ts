@@ -2,6 +2,7 @@ import { ExpenseState } from "@/types/expense.types";
 import { create } from "zustand";
 import {
   createExpense as createExpenseService,
+  deleteExpense as deleteExpenseServie,
   getAllExpenses as getAllExpensesService,
   updateExpense as updateExpenseService,
 } from "@/services/expenseService";
@@ -23,6 +24,8 @@ interface ExpenseStore extends ExpenseState {
     category: string,
     date: string,
   }) => Promise<void>;
+
+  deleteExpense: (id: string) => Promise<void>;
 
   setCategory: (category: string) => void;
   setSort: (sort: string) => void;
@@ -154,4 +157,31 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       })
     }
   },
+
+  deleteExpense: async (id: string) => {
+    set({
+      isLoading:true,
+      error: null
+    })
+
+    try {
+      await deleteExpenseServie(id);
+
+      set((state) => ({
+        expenses: state.expenses.filter(expense => expense._id !== id),
+        totalCount: state.totalCount - 1,
+        isLoading: false,
+        error: null,
+      }))
+
+
+    } catch(error) {
+      const err = error as AxiosError<{error: string}>;
+
+      set({
+        error: err?.response?.data?.error,
+        isLoading:false
+      })
+    }
+  } 
 }));
