@@ -1,14 +1,19 @@
 import ExpenseFilters from "@/components/Expenses/ExpenseFilters";
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
 import ExpenseList from "@/components/Expenses/ExpensesList";
+
 import { useExpenseStore } from "@/store/expenseStore";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ExpensesPage() {
-  const { error, isLoading } = useExpenseStore();
+  const { error, isLoading, getAllExpenses } = useExpenseStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    getAllExpenses();
+  }, [getAllExpenses])
 
   return (
     <main className="bg-slate-950 px-4 py-8 sm:px-8 sm:py-12">
