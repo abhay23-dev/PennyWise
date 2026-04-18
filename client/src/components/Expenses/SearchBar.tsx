@@ -15,16 +15,17 @@ export default function SearchBar() {
   }, [inputValue, setSearchTerm]);
 
   return (
-    <div>
-      <label htmlFor="search">Search Expenses</label>
-      <div>
-        <Search className="size-3" />
+    <div className="flex flex-col gap-2">
+      <label htmlFor="search" className="text-sm font-medium text-gray-400">Search Expenses</label>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-500" />
         <input
           type="text"
           id="search"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search by description, category, or amount..."
+          className="w-full pl-10 pr-4 py-2.5 bg-purple-950 rounded-sm text-gray-100 border-none outline-none"
         />
       </div>
     </div>
