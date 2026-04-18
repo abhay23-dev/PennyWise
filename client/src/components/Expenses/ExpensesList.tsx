@@ -9,71 +9,92 @@ interface ExpenseListProps {
   onDelete: (expense: Expense) => void;
 }
 
-export default function ExpenseList({ onEdit, onDelete}: ExpenseListProps) {
+export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
   const { expenses, filters } = useExpenseStore();
 
   const filteredExpenses = useMemo(() => {
-
     let result = [...expenses];
 
-    if(filters.searchTerm) {
+    if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
-      result = result.filter(expense => {
-        const descriptionMatch = expense.description.toLowerCase().includes(searchLower)
-        const categoryMatch = expense.category.toLowerCase().includes(searchLower)
-        const amountMatch = expense.amount.toString().toLowerCase().includes(searchLower);
+      result = result.filter((expense) => {
+        const descriptionMatch = expense.description
+          .toLowerCase()
+          .includes(searchLower);
+        const categoryMatch = expense.category
+          .toLowerCase()
+          .includes(searchLower);
+        const amountMatch = expense.amount
+          .toString()
+          .toLowerCase()
+          .includes(searchLower);
 
         return descriptionMatch || categoryMatch || amountMatch;
-      })
-
+      });
     }
 
-    if(filters.startDate) {
-      result = result.filter(expense => {
+    if (filters.startDate) {
+      result = result.filter((expense) => {
         const expenseDate = new Date(expense.date);
 
         const startDate = new Date(filters.startDate!);
         return expenseDate >= startDate;
-      })
+      });
     }
 
-    if(filters.endDate) {
-      result = result.filter(expense => {
+    if (filters.endDate) {
+      result = result.filter((expense) => {
         const expenseDate = new Date(expense.date);
 
         const endDate = new Date(filters.endDate!);
         return expenseDate <= endDate;
-      })
+      });
     }
 
-    if(filters.minAmount) {
+    if (filters.minAmount) {
       result = result.filter((expense) => expense.amount >= filters.minAmount!);
     }
-    if(filters.maxAmount) {
+    if (filters.maxAmount) {
       result = result.filter((expense) => expense.amount >= filters.maxAmount!);
     }
 
     return result;
-  }, [expenses, filters])
+  }, [expenses, filters]);
 
   function getEmptyMessage() {
-    if (filters.category && filters.category !== "all") {
-      return `No ${filters.category} expenses found`;
-    }
-    return "No expenses found";
+    const hasActiveFilters =
+      filters.searchTerm ||
+      filters.startDate ||
+      filters.endDate ||
+      filters.maxAmount ||
+      filters.minAmount ||
+      (filters.category && filters.category !== "all") ||
+      (filters.sort && filters.sort !== "-date");
+
+      if(hasActiveFilters) {
+        return "No expenses match your filters";
+      }
+      return "No expenses found";
   }
 
   function getEmptyHint() {
-    if (filters.category && filters.category !== "all") {
-      return "Try changing the category filter or add a new expense";
-    }
-
-    return "Start by adding your first expense";
+    const hasActiveFilters =
+      filters.searchTerm ||
+      filters.startDate ||
+      filters.endDate ||
+      filters.maxAmount ||
+      filters.minAmount ||
+      (filters.category && filters.category !== "all") ||
+      (filters.sort && filters.sort !== "-date");
+      if(hasActiveFilters) {
+        return "Try adjusting or clearing your filters";
+      }
+      return "Start by adding your first expense";
   }
 
   return (
     <section className="col-span-4 flex flex-col gap-6">
-      {expenses.length === 0 ? (
+      {filteredExpenses.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
           <Package className="size-24 text-gray-700" strokeWidth={1} />
 
@@ -93,13 +114,18 @@ export default function ExpenseList({ onEdit, onDelete}: ExpenseListProps) {
                 : "Your Expenses"}
             </h2>
             <span className="text-sm text-gray-500">
-              {expenses.length} expense{expenses.length === 1 ? "" : "s"}
+              {filteredExpenses.length} expense{filteredExpenses.length === 1 ? "" : "s"}
             </span>
           </div>
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {expenses.map((expense) => (
-              <ExpenseCard expense={expense} key={expense._id} onEdit={onEdit} onDelete={onDelete} />
+            {filteredExpenses.map((expense) => (
+              <ExpenseCard
+                expense={expense}
+                key={expense._id}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
             ))}
           </div>
         </>
