@@ -43,7 +43,7 @@ export default function ExpensesPage() {
 
   function handleDeleteExpense(expense: Expense) {
     setDeletingExpense(expense);
-    setIsModalOpen(true);
+    setIsDeleteModalOpen(true);
   }
 
   async function handleConfirmDelete() {

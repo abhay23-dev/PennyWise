@@ -14,6 +14,8 @@ export interface ExpenseFilters {
   searchTerm ? : string;
   startDate ? : string | null;
   endDate ? : string | null;
+  minAmount ? : number | null;
+  maxAmount ? : number | null;
 }
 
 export interface ExpenseState {

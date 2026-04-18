@@ -18,18 +18,26 @@ interface ExpenseStore extends ExpenseState {
   }) => Promise<void>;
   getAllExpenses: () => Promise<void>;
 
-  updateExpense: (id: string, data: {
-    amount: number,
-    description: string,
-    category: string,
-    date: string,
-  }) => Promise<void>;
+  updateExpense: (
+    id: string,
+    data: {
+      amount: number;
+      description: string;
+      category: string;
+      date: string;
+    },
+  ) => Promise<void>;
 
   deleteExpense: (id: string) => Promise<void>;
 
   setCategory: (category: string) => void;
   setSort: (sort: string) => void;
   clearFilters: () => void;
+
+  setSearchTerm: (term: string) => void;
+  setDateRange: (start: string | null, end: string | null) => void;
+  setAmountRange: (min: number | null, max: number | null) => void;
+  clearFilter: (filterType: string) => void;
 }
 
 export const useExpenseStore = create<ExpenseStore>((set, get) => ({
@@ -38,7 +46,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   error: null,
   totalCount: 0,
   currentExpense: null,
-  filters: { category: "all", sort: "-date" },
+  filters: { category: "all", sort: "-date", searchTerm: "", startDate: null, endDate: null , minAmount: null, maxAmount: null},
 
   clearError: () => set({ error: null }),
 
@@ -61,6 +69,65 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       },
     });
     get().getAllExpenses();
+  },
+
+  setSearchTerm: async (term: string) => {
+    set({
+      filters: {
+        ...get().filters, searchTerm: term
+      }
+    });
+  },
+  setDateRange: async (start: string | null, end: string | null) => {
+    set({
+      filters: {
+        ...get().filters, startDate: start,
+      endDate: end,
+      }
+    })
+  },
+
+  setAmountRange: async (min: number | null, max: number | null) => {
+    set({
+      filters: {
+        ...get().filters,
+        minAmount: min,
+        maxAmount: max,
+      }
+    });
+  },
+  clearFilter: (filterType: string) => {
+    const currentFilters = get().filters;
+    switch(filterType){
+      case "search":
+        set({
+          filters: {
+            ...currentFilters,
+          searchTerm: "",
+          }
+        });
+        break;
+
+      case "dateRange":
+        set({
+          filters: {
+            ...currentFilters,
+          startDate: null,
+          endDate: null,
+          }
+        });
+        break;
+
+      case "amountRange":
+        set({
+          filters: {
+            ...currentFilters,
+          minAmount: null,
+          maxAmount: null,
+          }
+        });
+        break;
+    }
   },
 
   createExpense: async (data: {
@@ -133,55 +200,58 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
     }
   },
 
-  updateExpense: async (id: string, data: {
-    amount: number,
-    description: string,
-    category: string,
-    date: string,
-  }) => {
+  updateExpense: async (
+    id: string,
+    data: {
+      amount: number;
+      description: string;
+      category: string;
+      date: string;
+    },
+  ) => {
     set({ error: null, isLoading: true });
 
     try {
       const response = await updateExpenseService(id, data);
 
       set((state) => ({
-        expenses: state.expenses.map(expense => expense._id === id ? response.data! : expense),
+        expenses: state.expenses.map((expense) =>
+          expense._id === id ? response.data! : expense,
+        ),
         isLoading: false,
-        error: null
-      }))
-    } catch(error) {
-      const err = error as AxiosError<{error: string}>;
+        error: null,
+      }));
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
       set({
         error: err?.response?.data?.error,
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
   },
 
   deleteExpense: async (id: string) => {
     set({
-      isLoading:true,
-      error: null
-    })
+      isLoading: true,
+      error: null,
+    });
 
     try {
       await deleteExpenseServie(id);
 
       set((state) => ({
-        expenses: state.expenses.filter(expense => expense._id !== id),
+        expenses: state.expenses.filter((expense) => expense._id !== id),
         totalCount: state.totalCount - 1,
         isLoading: false,
         error: null,
-      }))
-
-
-    } catch(error) {
-      const err = error as AxiosError<{error: string}>;
+      }));
+    } catch (error) {
+      const err = error as AxiosError<{ error: string }>;
 
       set({
         error: err?.response?.data?.error,
-        isLoading:false
-      })
+        isLoading: false,
+      });
     }
   },
 }));
