@@ -34,26 +34,22 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
 
     if (filters.startDate) {
       result = result.filter((expense) => {
-        const expenseDate = new Date(expense.date);
-
-        const startDate = new Date(filters.startDate!);
-        return expenseDate >= startDate;
+        const expenseDate = expense.date.toString().split("T")[0];
+        return expenseDate >= filters.startDate!;
       });
     }
 
     if (filters.endDate) {
       result = result.filter((expense) => {
-        const expenseDate = new Date(expense.date);
-
-        const endDate = new Date(filters.endDate!);
-        return expenseDate <= endDate;
+        const expenseDate = expense.date.toString().split("T")[0];
+        return expenseDate <= filters.endDate!;
       });
     }
 
-    if (filters.minAmount) {
+    if (filters.minAmount !== null) {
       result = result.filter((expense) => expense.amount >= filters.minAmount!);
     }
-    if (filters.maxAmount) {
+    if (filters.maxAmount !== null) {
       result = result.filter((expense) => expense.amount >= filters.maxAmount!);
     }
 
