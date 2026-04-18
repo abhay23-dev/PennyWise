@@ -20,9 +20,10 @@ export default function SearchBar() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-500" />
         <input
+          key={filters.searchTerm}
           type="text"
           id="search"
-          value={inputValue}
+          defaultValue={filters.searchTerm || ""}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search by description, category, or amount..."
           className="w-full pl-10 pr-4 py-2.5 bg-purple-950 rounded-sm text-gray-100 border-none outline-none"
