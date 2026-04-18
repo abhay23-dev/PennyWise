@@ -307,7 +307,7 @@ export const createExpense = asyncHandler(async (req: Request, res: Response, ne
   }
   const expenseDate = date ? new Date(date) : new Date();
   const today = new Date();
-  today.setHours(0,0,0,0);
+  //today.setHours(0,0,0,0);
   if(expenseDate > today) {
     throw new AppError("Cannot create an expense for a future date", 400);
   }
@@ -383,7 +383,7 @@ export const updateExpense = asyncHandler(async (req: Request, res: Response, ne
 
   const expenseDate = date ? new Date(date) : new Date();
   const today = new Date();
-  today.setHours(0,0,0,0);
+  //today.setHours(0,0,0,0);
   if(expenseDate > today) {
     throw new AppError("Cannot create an expense for a future date", 400);
   }
