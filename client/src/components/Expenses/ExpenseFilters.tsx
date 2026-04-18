@@ -57,7 +57,7 @@ export default function ExpenseFilters() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <label
-            htmlFor="categoty-filter"
+            htmlFor="category-filter"
             className="text-sm font-medium text-gray-400"
           >
             Category

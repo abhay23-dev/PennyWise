@@ -26,7 +26,6 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
           .includes(searchLower);
         const amountMatch = expense.amount
           .toString()
-          .toLowerCase()
           .includes(searchLower);
 
         return descriptionMatch || categoryMatch || amountMatch;
@@ -71,10 +70,10 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
       (filters.category && filters.category !== "all") ||
       (filters.sort && filters.sort !== "-date");
 
-      if(hasActiveFilters) {
-        return "No expenses match your filters";
-      }
-      return "No expenses found";
+    if (hasActiveFilters) {
+      return "No expenses match your filters";
+    }
+    return "No expenses found";
   }
 
   function getEmptyHint() {
@@ -86,10 +85,10 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
       filters.minAmount ||
       (filters.category && filters.category !== "all") ||
       (filters.sort && filters.sort !== "-date");
-      if(hasActiveFilters) {
-        return "Try adjusting or clearing your filters";
-      }
-      return "Start by adding your first expense";
+    if (hasActiveFilters) {
+      return "Try adjusting or clearing your filters";
+    }
+    return "Start by adding your first expense";
   }
 
   return (
@@ -110,11 +109,12 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-100">
               {filters.category && filters.category !== "all"
-                ? `${filters.category?.charAt(0).toUpperCase + filters.category?.slice(1)} Expenses`
+                ? `${filters.category.charAt(0).toUpperCase() + filters.category.slice(1)} Expenses`
                 : "Your Expenses"}
             </h2>
             <span className="text-sm text-gray-500">
-              {filteredExpenses.length} expense{filteredExpenses.length === 1 ? "" : "s"}
+              {filteredExpenses.length} expense
+              {filteredExpenses.length === 1 ? "" : "s"}
             </span>
           </div>
 

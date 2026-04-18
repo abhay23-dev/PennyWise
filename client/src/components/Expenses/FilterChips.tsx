@@ -1,43 +1,44 @@
 import { useExpenseStore } from "@/store/expenseStore";
 import { X } from "lucide-react";
 
-
 export default function FilterChips() {
-  const {filters, removeFilter} = useExpenseStore();
-  const activeFilters: {type: string, label: string}[] = [];
+  const { filters, removeFilter } = useExpenseStore();
+  const activeFilters: { type: string; label: string }[] = [];
 
-  if(filters.searchTerm) {
+  if (filters.searchTerm) {
     activeFilters.push({
       type: "search",
-      label: `Search: "${filters.searchTerm}"`
-    })
+      label: `Search: "${filters.searchTerm}"`,
+    });
   }
-  if(filters.startDate || filters.endDate) {
+  if (filters.startDate || filters.endDate) {
     const start = filters.startDate || "Any";
     const end = filters.endDate || "Any";
 
     activeFilters.push({
       type: "dateRange",
-      label: `Date: ${start} to ${end}`
+      label: `Date: ${start} to ${end}`,
     });
   }
-  if(filters.minAmount || filters.endDate) {
+  if (filters.minAmount || filters.endDate) {
     const min = filters.minAmount || "Any";
     const max = filters.maxAmount || "Any";
     activeFilters.push({
       type: "amountRange",
-      label: `Amount: ${min} to ${max}`
-    })
+      label: `Amount: ${min} to ${max}`,
+    });
   }
 
-  if(activeFilters.length === 0) return ;
+  if (activeFilters.length === 0) return;
   return (
     <div className="flex flex-wrap gap-2">
       {activeFilters.map((activeFilter) => (
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-900/30 border border-purple-800 rounded-full text-sm text-purple-300"
->
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-900/30 border border-purple-800 rounded-full text-sm text-purple-300">
           <span>{activeFilter.label}</span>
-          <button onClick={() => removeFilter(activeFilter.type)} className="hover:text-purple-100 transition-colors">
+          <button
+            onClick={() => removeFilter(activeFilter.type)}
+            className="hover:text-purple-100 transition-colors"
+          >
             <X />
           </button>
         </div>
