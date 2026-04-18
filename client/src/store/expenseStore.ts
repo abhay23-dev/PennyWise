@@ -38,6 +38,9 @@ interface ExpenseStore extends ExpenseState {
   setDateRange: (start: string | null, end: string | null) => void;
   setAmountRange: (min: number | null, max: number | null) => void;
   removeFilter: (filterType: string) => void;
+
+  loadMoreExpenses: () => void;
+  resetPagination: () => void;
 }
 
 export const useExpenseStore = create<ExpenseStore>((set, get) => ({
@@ -56,16 +59,21 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
     maxAmount: null,
   },
 
+  page:1,
+  itemsPerPage: 4,
+
   clearError: () => set({ error: null }),
 
   setCategory: (category: string) => {
     set({ filters: { ...get().filters, category } });
     get().getAllExpenses();
+    get().resetPagination();
   },
 
   setSort: (sort: string) => {
     set({ filters: { ...get().filters, sort } });
     get().getAllExpenses();
+    get().resetPagination();
   },
 
   clearFilters: () => {
@@ -81,21 +89,25 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       },
     });
     get().getAllExpenses();
+    get().resetPagination();
   },
 
   setSearchTerm: async (term: string) => {
     set((state) => ({ filters: { ...state.filters, searchTerm: term } }));
+    get().resetPagination();
   },
   setDateRange: async (start: string | null, end: string | null) => {
     set((state) => ({
       filters: { ...state.filters, startDate: start, endDate: end },
     }));
+    get().resetPagination();
   },
 
   setAmountRange: async (min: number | null, max: number | null) => {
     set((state) => ({
       filters: { ...state.filters, minAmount: min, maxAmount: max },
     }));
+    get().resetPagination();
   },
   removeFilter: (filterType: string) => {
     switch (filterType) {
@@ -147,6 +159,16 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
         break;
     }
     get().getAllExpenses();
+    get().resetPagination();
+  },
+  loadMoreExpenses: () => {
+    const {page} = get();
+
+    set({page: page + 1});
+  },
+
+  resetPagination: () => {
+    set({page: 1});
   },
 
   createExpense: async (data: {

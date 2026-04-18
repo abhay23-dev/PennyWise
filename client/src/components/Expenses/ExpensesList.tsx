@@ -4,6 +4,7 @@ import ExpenseCard from "./ExpenseCard";
 import { Expense } from "@/types";
 import { useMemo } from "react";
 import ResultsSummary from "./ResultsSummary";
+import Pagination from "./Pagination";
 
 interface ExpenseListProps {
   onEdit: (expense: Expense) => void;
@@ -11,7 +12,7 @@ interface ExpenseListProps {
 }
 
 export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
-  const { expenses, filters } = useExpenseStore();
+  const { expenses, filters, page, itemsPerPage } = useExpenseStore();
 
   const filteredExpenses = useMemo(() => {
     let result = [...expenses];
@@ -56,6 +57,15 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
 
     return result;
   }, [expenses, filters]);
+
+  const displayedExpenses = useMemo(() => {
+    const endIndex = page * itemsPerPage;
+    return filteredExpenses.slice(0, endIndex)
+  }, [filteredExpenses, page, itemsPerPage]);
+
+  const hasMore = useMemo(() => {
+    return filteredExpenses.length > displayedExpenses.length;
+  }, [filteredExpenses.length, displayedExpenses.length]);
 
   function getEmptyMessage() {
     const hasActiveFilters =
@@ -127,6 +137,8 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
               />
             ))}
           </div>
+
+          <Pagination displayedCount={displayedExpenses.length} totalCount={filteredExpenses.length} hasMore={hasMore} />
         </>
       )}
     </section>

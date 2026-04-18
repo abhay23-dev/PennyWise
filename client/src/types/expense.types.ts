@@ -25,5 +25,8 @@ export interface ExpenseState {
   error: string | null;
   filters: ExpenseFilters;
   totalCount: number;
+
+  page: number;
+  itemsPerPage: number;
 }
 
