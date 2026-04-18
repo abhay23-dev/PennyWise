@@ -1,6 +1,6 @@
 import { useExpenseStore } from "@/store/expenseStore";
 
-export default function DateRangeFilter() {
+export default function AmountRangeFilter() {
   const { filters, setAmountRange } = useExpenseStore();
 
   function handleMinAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
