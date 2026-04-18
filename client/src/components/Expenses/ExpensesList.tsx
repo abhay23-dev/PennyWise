@@ -2,6 +2,7 @@ import { useExpenseStore } from "@/store/expenseStore";
 import { Package } from "lucide-react";
 import ExpenseCard from "./ExpenseCard";
 import { Expense } from "@/types";
+import { useMemo } from "react";
 
 interface ExpenseListProps {
   onEdit: (expense: Expense) => void;
@@ -10,6 +11,50 @@ interface ExpenseListProps {
 
 export default function ExpenseList({ onEdit, onDelete}: ExpenseListProps) {
   const { expenses, filters } = useExpenseStore();
+
+  const filteredExpenses = useMemo(() => {
+
+    let result = [...expenses];
+
+    if(filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      result = result.filter(expense => {
+        const descriptionMatch = expense.description.toLowerCase().includes(searchLower)
+        const categoryMatch = expense.category.toLowerCase().includes(searchLower)
+        const amountMatch = expense.amount.toString().toLowerCase().includes(searchLower);
+
+        return descriptionMatch || categoryMatch || amountMatch;
+      })
+
+    }
+
+    if(filters.startDate) {
+      result = result.filter(expense => {
+        const expenseDate = new Date(expense.date);
+
+        const startDate = new Date(filters.startDate!);
+        return expenseDate >= startDate;
+      })
+    }
+
+    if(filters.endDate) {
+      result = result.filter(expense => {
+        const expenseDate = new Date(expense.date);
+
+        const endDate = new Date(filters.endDate!);
+        return expenseDate <= endDate;
+      })
+    }
+
+    if(filters.minAmount) {
+      result = result.filter((expense) => expense.amount >= filters.minAmount!);
+    }
+    if(filters.maxAmount) {
+      result = result.filter((expense) => expense.amount >= filters.maxAmount!);
+    }
+
+    return result;
+  }, [expenses, filters])
 
   function getEmptyMessage() {
     if (filters.category && filters.category !== "all") {
