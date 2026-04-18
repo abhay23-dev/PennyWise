@@ -1,6 +1,6 @@
 import { useExpenseStore } from "@/store/expenseStore";
 import { X } from "lucide-react";
-import { useState } from "react";
+
 
 export default function FilterChips() {
   const {filters, removeFilter} = useExpenseStore();
@@ -32,11 +32,12 @@ export default function FilterChips() {
 
   if(activeFilters.length === 0) return ;
   return (
-    <div>
+    <div className="flex flex-wrap gap-2">
       {activeFilters.map((activeFilter) => (
-        <div>
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-900/30 border border-purple-800 rounded-full text-sm text-purple-300"
+>
           <span>{activeFilter.label}</span>
-          <button onClick={() => removeFilter(activeFilter.type)}>
+          <button onClick={() => removeFilter(activeFilter.type)} className="hover:text-purple-100 transition-colors">
             <X />
           </button>
         </div>
