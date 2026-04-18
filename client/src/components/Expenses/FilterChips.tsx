@@ -12,13 +12,12 @@ export default function FilterChips() {
     });
   }
   if (filters.sort && filters.sort !== "-date") {
-
-    const sortLabels: {[key: string]: string} = {
-      "date": "Date (Oldest First)",
+    const sortLabels: { [key: string]: string } = {
+      date: "Date (Oldest First)",
       "-date": "Date (Newest First)",
       "-amount": "Amount (High to Low)",
-      "amount": "Amount (Low to Hign)"
-    }
+      amount: "Amount (Low to Hign)",
+    };
     activeFilters.push({
       type: "sort",
       label: `Sort: ${sortLabels[filters.sort] || filters.sort}`,
@@ -49,7 +48,7 @@ export default function FilterChips() {
     });
   }
 
-  if (activeFilters.length === 0) return;
+  if (activeFilters.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
       {activeFilters.map((activeFilter) => (
@@ -59,7 +58,7 @@ export default function FilterChips() {
             onClick={() => removeFilter(activeFilter.type)}
             className="hover:text-purple-100 transition-colors"
           >
-            <X />
+            <X className="size-3.5" />
           </button>
         </div>
       ))}

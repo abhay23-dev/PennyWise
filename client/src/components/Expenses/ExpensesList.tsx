@@ -50,7 +50,7 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
       result = result.filter((expense) => expense.amount >= filters.minAmount!);
     }
     if (filters.maxAmount !== null) {
-      result = result.filter((expense) => expense.amount >= filters.maxAmount!);
+      result = result.filter((expense) => expense.amount <= filters.maxAmount!);
     }
 
     return result;

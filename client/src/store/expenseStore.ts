@@ -60,6 +60,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
 
   setCategory: (category: string) => {
     set({ filters: { ...get().filters, category } });
+    get().getAllExpenses();
   },
 
   setSort: (sort: string) => {
@@ -145,6 +146,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
         }));
         break;
     }
+    get().getAllExpenses();
   },
 
   createExpense: async (data: {
