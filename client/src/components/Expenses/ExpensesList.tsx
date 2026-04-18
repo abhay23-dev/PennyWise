@@ -128,7 +128,7 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
           </div>
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredExpenses.map((expense) => (
+            {displayedExpenses.map((expense) => (
               <ExpenseCard
                 expense={expense}
                 key={expense._id}

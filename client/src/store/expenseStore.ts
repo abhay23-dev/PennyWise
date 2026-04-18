@@ -60,7 +60,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   },
 
   page:1,
-  itemsPerPage: 4,
+  itemsPerPage: 20,
 
   clearError: () => set({ error: null }),
 
