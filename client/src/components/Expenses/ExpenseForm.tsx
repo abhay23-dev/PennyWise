@@ -142,6 +142,7 @@ export default function ExpenseForm({ onSuccess, expense }: ExpenseFormProps) {
               onChange={(e) => setDate(e.target.value)}
               required
               disabled={isLoading}
+              max={new Date().toISOString().split("T")[0]}
               className="px-4 py-3 bg-purple-950 rounded-sm text-gray-100 focus:outline-none focus:border-purple-500 transition-colors"
             />
           </div>

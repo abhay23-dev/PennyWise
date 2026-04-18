@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ExpensesPage() {
-  const { isLoading, getAllExpenses, deleteExpense } = useExpenseStore();
+  const {  isLoading, getAllExpenses, deleteExpense } = useExpenseStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | undefined>(

@@ -23,8 +23,10 @@ export default function ExpenseFilters() {
     filters.category !== "all",
     filters.sort !== "-date",
     !!filters.searchTerm,
-    !!filters.startDate || !!filters.endDate,
-    !!filters.minAmount || !! filters.maxAmount,
+    !!filters.startDate,
+    !!filters.endDate,
+    !!filters.minAmount,
+    !! filters.maxAmount,
   ].filter(Boolean).length;
 
   return (

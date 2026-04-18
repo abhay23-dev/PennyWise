@@ -24,7 +24,7 @@ export default function DateRangeFilter() {
           id="start-date"
           onChange={handleStartDateChange}
           value={filters.startDate || ""}
-          max={filters.endDate || undefined}
+          max={new Date().toISOString().split("T")[0]}
           className="px-4 py-2.5 bg-purple-950 rounded-sm text-gray-100 border-none outline-none"
         />
       </div>
@@ -36,6 +36,7 @@ export default function DateRangeFilter() {
           onChange={handleEndDateChange}
           value={filters.endDate || ""}
           min={filters.startDate || undefined}
+          max={new Date().toISOString().split("T")[0]}
           className="px-4 py-2.5 bg-purple-950 rounded-sm text-gray-100 border-none outline-none"
         />
       </div>
