@@ -52,8 +52,6 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
 
   setCategory: (category: string) => {
     set({ filters: { ...get().filters, category } });
-
-    get().getAllExpenses();
   },
 
   setSort: (sort: string) => {
@@ -77,29 +75,14 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   },
 
   setSearchTerm: async (term: string) => {
-    set({
-      filters: {
-        ...get().filters, searchTerm: term
-      }
-    });
+    set((state) => ({filters: {...state.filters, searchTerm: term}}))
   },
   setDateRange: async (start: string | null, end: string | null) => {
-    set({
-      filters: {
-        ...get().filters, startDate: start,
-      endDate: end,
-      }
-    })
+    set((state) => ({filters: {...state.filters, startDate: start, endDate: end}}))
   },
 
   setAmountRange: async (min: number | null, max: number | null) => {
-    set({
-      filters: {
-        ...get().filters,
-        minAmount: min,
-        maxAmount: max,
-      }
-    });
+    set((state) => ({filters: {...state.filters, minAmount: min, maxAmount: max}}));
   },
   removeFilter: (filterType: string) => {
     const currentFilters = get().filters;
