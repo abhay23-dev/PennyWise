@@ -9,20 +9,20 @@ export default function ResultsSummary({expenses}: ResultsSummaryProps) {
   const avgAmountOfExpenses = numberOfExpenses > 0 ? totalAmountOfExpenses / numberOfExpenses : 0;
 
   return (
-    <div>
-      <div>
-        <span>Total Expenses</span>
-        <span>{numberOfExpenses} {numberOfExpenses === 1 ? "expense" : "expenses"}</span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 border border-purple-950 rounded-sm">
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-gray-400">Total Expenses</span>
+        <span className="text-2xl font-bold text-gray-100">{numberOfExpenses} {numberOfExpenses === 1 ? "expense" : "expenses"}</span>
       </div>
 
-      <div>
-        <span>Total Amount</span>
-        <span>${totalAmountOfExpenses.toFixed(2)}</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-gray-400">Total Amount</span>
+        <span className="text-2xl font-bold text-purple-400">${totalAmountOfExpenses.toFixed(2)}</span>
       </div>
 
-      <div>
-        <span>Average Amount</span>
-        <span>${avgAmountOfExpenses.toFixed(2)}</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-gray-400">Average Amount</span>
+        <span className="text-2xl font-bold text-gray-100">${avgAmountOfExpenses.toFixed(2)}</span>
       </div>
     </div>
   )
