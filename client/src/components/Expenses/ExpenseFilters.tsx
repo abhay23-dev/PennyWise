@@ -3,6 +3,10 @@ import { ExpenseCategory } from "@/types";
 import { getCategoryConfig } from "@/types/CategoryConfig";
 import { Filter, X } from "lucide-react";
 import React from "react";
+import DateRangeFilter from "./DateRangeFilter";
+import AmountRangeFilter from "./AmountRangeFilter";
+import FilterChips from "./FilterChips";
+import SearchBar from "./SearchBar";
 
 export default function ExpenseFilters() {
   const { filters, setCategory, setSort, clearFilters } = useExpenseStore();
@@ -18,6 +22,9 @@ export default function ExpenseFilters() {
   const activeFiltersCount = [
     filters.category !== "all",
     filters.sort !== "-date",
+    !!filters.searchTerm,
+    !!filters.startDate || !!filters.endDate,
+    !!filters.minAmount || !! filters.maxAmount,
   ].filter(Boolean).length;
 
   return (
@@ -42,6 +49,8 @@ export default function ExpenseFilters() {
           </button>
         )}
       </div>
+
+      <SearchBar />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
@@ -92,6 +101,10 @@ export default function ExpenseFilters() {
           </select>
         </div>
       </div>
+
+      <DateRangeFilter />
+      <AmountRangeFilter />
+      <FilterChips />
     </div>
   );
 }
