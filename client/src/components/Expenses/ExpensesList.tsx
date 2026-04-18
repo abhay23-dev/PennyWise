@@ -3,6 +3,7 @@ import { Package } from "lucide-react";
 import ExpenseCard from "./ExpenseCard";
 import { Expense } from "@/types";
 import { useMemo } from "react";
+import ResultsSummary from "./ResultsSummary";
 
 interface ExpenseListProps {
   onEdit: (expense: Expense) => void;
@@ -102,6 +103,8 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
         </div>
       ) : (
         <>
+          <ResultsSummary expenses={filteredExpenses} />
+
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-100">
               {filters.category && filters.category !== "all"
