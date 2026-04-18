@@ -37,7 +37,7 @@ interface ExpenseStore extends ExpenseState {
   setSearchTerm: (term: string) => void;
   setDateRange: (start: string | null, end: string | null) => void;
   setAmountRange: (min: number | null, max: number | null) => void;
-  clearFilter: (filterType: string) => void;
+  removeFilter: (filterType: string) => void;
 }
 
 export const useExpenseStore = create<ExpenseStore>((set, get) => ({
@@ -101,7 +101,7 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       }
     });
   },
-  clearFilter: (filterType: string) => {
+  removeFilter: (filterType: string) => {
     const currentFilters = get().filters;
     switch(filterType){
       case "search":
