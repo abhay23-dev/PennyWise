@@ -46,7 +46,15 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   error: null,
   totalCount: 0,
   currentExpense: null,
-  filters: { category: "all", sort: "-date", searchTerm: "", startDate: null, endDate: null , minAmount: null, maxAmount: null},
+  filters: {
+    category: "all",
+    sort: "-date",
+    searchTerm: "",
+    startDate: null,
+    endDate: null,
+    minAmount: null,
+    maxAmount: null,
+  },
 
   clearError: () => set({ error: null }),
 
@@ -75,45 +83,66 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
   },
 
   setSearchTerm: async (term: string) => {
-    set((state) => ({filters: {...state.filters, searchTerm: term}}))
+    set((state) => ({ filters: { ...state.filters, searchTerm: term } }));
   },
   setDateRange: async (start: string | null, end: string | null) => {
-    set((state) => ({filters: {...state.filters, startDate: start, endDate: end}}))
+    set((state) => ({
+      filters: { ...state.filters, startDate: start, endDate: end },
+    }));
   },
 
   setAmountRange: async (min: number | null, max: number | null) => {
-    set((state) => ({filters: {...state.filters, minAmount: min, maxAmount: max}}));
+    set((state) => ({
+      filters: { ...state.filters, minAmount: min, maxAmount: max },
+    }));
   },
   removeFilter: (filterType: string) => {
-    const currentFilters = get().filters;
-    switch(filterType){
-      case "search":
-        set({
+    switch (filterType) {
+      case "category":
+        set((state) => ({
           filters: {
-            ...currentFilters,
-          searchTerm: "",
-          }
-        });
+            ...state.filters,
+            category: "all",
+          },
+        }));
+        break;
+
+      case "sort":
+        set((state) => ({
+          filters: {
+            ...state.filters,
+            sort: "-date",
+          },
+        }));
+        break;
+
+      case "search":
+        set((state) => ({
+          filters: {
+            ...state.filters,
+            searchTerm: "",
+          },
+        }));
         break;
 
       case "dateRange":
-        set({
+        set((state) => ({
           filters: {
-            ...currentFilters,
-          startDate: null,
-          endDate: null,
-          }
-        });
+            ...state.filters,
+            startDate: null,
+            endDate: null,
+          },
+        }));
         break;
 
       case "amountRange":
-        set({
+        set((state) => ({
           filters: {
-            ...currentFilters,
-          minAmount: null,
-          maxAmount: null,
-          }
-        });
+            ...state.filters,
+            minAmount: null,
+            maxAmount: null,
+          },
+        }));
         break;
     }
   },

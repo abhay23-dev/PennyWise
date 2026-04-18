@@ -5,6 +5,26 @@ export default function FilterChips() {
   const { filters, removeFilter } = useExpenseStore();
   const activeFilters: { type: string; label: string }[] = [];
 
+  if (filters.category && filters.category !== "all") {
+    activeFilters.push({
+      type: "category",
+      label: `Category: ${filters.category}`,
+    });
+  }
+  if (filters.sort && filters.sort !== "-date") {
+
+    const sortLabels: {[key: string]: string} = {
+      "date": "Date (Oldest First)",
+      "-date": "Date (Newest First)",
+      "-amount": "Amount (High to Low)",
+      "amount": "Amount (Low to Hign)"
+    }
+    activeFilters.push({
+      type: "sort",
+      label: `Sort: ${sortLabels[filters.sort] || filters.sort}`,
+    });
+  }
+
   if (filters.searchTerm) {
     activeFilters.push({
       type: "search",
@@ -20,7 +40,7 @@ export default function FilterChips() {
       label: `Date: ${start} to ${end}`,
     });
   }
-  if (filters.minAmount || filters.endDate) {
+  if (filters.minAmount !== null || filters.endDate !== null) {
     const min = filters.minAmount || "Any";
     const max = filters.maxAmount || "Any";
     activeFilters.push({

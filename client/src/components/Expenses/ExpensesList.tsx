@@ -105,7 +105,7 @@ export default function ExpenseList({ onEdit, onDelete }: ExpenseListProps) {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-100">
               {filters.category && filters.category !== "all"
-                ? `${filters.category.charAt(0).toUpperCase() + filters.category.slice(1)} Expenses`
+                ? `${filters.category?.charAt(0).toUpperCase() + filters.category?.slice(1)} Expenses`
                 : "Your Expenses"}
             </h2>
             <span className="text-sm text-gray-500">
