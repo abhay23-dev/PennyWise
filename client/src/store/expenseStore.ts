@@ -66,6 +66,11 @@ export const useExpenseStore = create<ExpenseStore>((set, get) => ({
       filters: {
         category: "all",
         sort: "-date",
+        searchTerm: "",
+        startDate: null,
+        endDate: null,
+        minAmount: null,
+        maxAmount: null,
       },
     });
     get().getAllExpenses();
