@@ -24,18 +24,18 @@ export default function DateRangeFilter() {
           id="start-date"
           onChange={handleStartDateChange}
           value={filters.startDate || ""}
-          min={filters.startDate || undefined}
+          max={filters.endDate || undefined}
           
         />
       </div>
       <div>
-        <label htmlFor="end-date">Start Date</label>
+        <label htmlFor="end-date">End Date</label>
         <input
           type="date"
           id="end-date"
           onChange={handleEndDateChange}
-          value={filters.startDate || ""}
-          max={filters.endDate || undefined}
+          value={filters.endDate || ""}
+          min={filters.startDate || undefined}
         />
       </div>
     </div>
