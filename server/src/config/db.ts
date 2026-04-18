@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const connectDB = async () => {
   
   try{
-    const mongoDBUri = process.env.MONGODBURI || "mongodb+srv://2k23cs2313908_db_user:abhay2355@cluster0.nob0ann.mongodb.net/pennywise"
+    const mongoDBUri = process.env.MONGODBURI;
     const connection = await mongoose.connect(mongoDBUri);
     console.log("====================================");
     console.log("MongoDB Connected Successfully");
