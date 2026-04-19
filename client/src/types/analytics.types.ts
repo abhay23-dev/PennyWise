@@ -16,7 +16,7 @@ export interface MonthlyTotal {
 export interface DashboardStats {
   totalExpenses: number;
   expenseCount: number;
-  averageExpense: number;
+  roundedAverageExpenseAmount: number;
 
   highestExpense: Expense | null;
   lowestExpense: Expense | null;
