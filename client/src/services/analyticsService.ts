@@ -22,3 +22,8 @@ export const getTrends = async () => {
   const response = await api.get<ApiResponse<SpendingTrend[]>>("/analytics/trends");
   return response.data;
 }
+
+export const getPeriodStats = async (days: number) => {
+  const response = await api.get<ApiResponse<PeriodStats>>(`/analytics/period?days=${days}`);
+  return response.data;
+}
