@@ -40,3 +40,12 @@ export interface AnalyticsState {
   isLoading: boolean;
   error: string | null;
 }
+
+export interface PeriodStats {
+  count: number;
+  average: number;
+  startDate: string;
+  endDate: string;
+  days: number;
+  categories: CategoryTotal[];
+}
