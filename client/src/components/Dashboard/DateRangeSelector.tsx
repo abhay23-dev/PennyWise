@@ -10,12 +10,12 @@ export default function DateRangeSelector({selected, onChange}: DateRangeSelecto
     {value: "90", label: "Last 90 Days"},
     {value: "180", label: "Last 180 Days"},
     {value: "365", label: "Last 365 Days"},
-    {value: "all", label: "all"},
+    {value: "all", label: "All Time"},
   ]
   return (
-    <div>
-      <label htmlFor="date-range">Time Period</label>
-      <select name="date-range" id="date-range" value={selected} onChange={(e) => onChange(e.target.value)}>
+    <div className="flex items-center gap-3 mb-6">
+      <label htmlFor="date-range" className="text-sm font-medium text-gray-400">Time Period</label>
+      <select name="date-range" id="date-range" value={selected} onChange={(e) => onChange(e.target.value)} className="px-4 py-2 bg-purple-950 rounded-sm text-gray-100 border-none outline-none cursor-pointer">
         {
           options.map((option) => (
             <option key={option.value} value={option.value}>
