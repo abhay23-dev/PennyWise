@@ -202,3 +202,64 @@ export const getSpendingTrends = asyncHandler(async(req: Request, res: Response,
   sendSuccess(res, trends, "Spending trends retrieved.");
 
 });
+
+export const getPeriodStats = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+  const userId = req.userId;
+  const days = Number(req.query.days);
+  if(isNaN(days)) {
+    throw new AppError("Days must be a valid number", 400);
+  }
+  if(days < 1 || days > 365) {
+    throw new AppError("Days must be between 1 and 365", 400);
+  }
+
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days)
+
+  const userExpenses = await Expense.find({userId: userId});
+
+  const periodExpenses = userExpenses.filter((expense) => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate >= startDate && expenseDate <= endDate;
+  })
+
+  if(periodExpenses.length === 0) {
+    return sendSuccess(
+      res, {
+        total: 0,
+        count: 0,
+        average: 0,
+        startDate: startDate.toISOString().split("T")[0],
+        endDate: endDate.toISOString().split("T")[0],
+      },
+      `No expenses found for last ${days}`,
+    );
+  }
+
+  const total = periodExpenses.reduce((sum, expense) => sum+expense.amount, 0);
+  const count = periodExpenses.length;
+  const average = total/count;
+
+  const categoryBreakdown = periodExpenses.reduce((acc,expense) => {
+    if(!acc[expense.category]) {
+      acc[expense.category] = { total: 0, count: 0};
+    }
+
+    acc[expense.category].total += expense.amount;
+    acc[expense.category].count += 1;
+
+    return acc;
+  }, {} as Record<string, {total: number, count: number}>);
+
+  const categoryArray = Object.entries(categoryBreakdown).map(([category, data]) => ({
+    category,
+    total: Math.round(data.total * 100) / 100,
+    count: data.count,
+    percentage: Math.round((data.total / total) * 1000) / 10,
+  }));
+
+  categoryArray.sort((a, b) => b.total - a.total);
+
+  return sendSuccess(res, categoryArray, `Last ${days} days spending retrieved`);
+})
