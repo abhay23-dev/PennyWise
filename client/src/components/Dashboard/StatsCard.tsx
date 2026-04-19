@@ -2,13 +2,22 @@ import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
   icon: LucideIcon;
-  label: string,
+  label: string;
   value: string | number;
+  onClick: () => void;
 }
 
-export default function StatsCard({icon: Icon, label, value}: StatsCardProps) {
+export default function StatsCard({
+  icon: Icon,
+  label,
+  value,
+  onClick,
+}: StatsCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-6 border border-purple-950 rounded-sm">
+    <div
+      onClick={onClick}
+      className={`flex flex-col gap-4 p-6 border border-purple-950 rounded-sm ${onClick ? "cursor-pointer hover:border-purple-700 transition-colors" :  ""}`}
+    >
       <div className="flex items-center gap-3">
         <div className="p-2 bg-purple-900/30 rounded-sm">
           <Icon className="size-5 text-purple-400" />
@@ -17,5 +26,5 @@ export default function StatsCard({icon: Icon, label, value}: StatsCardProps) {
       </div>
       <p className="text-3xl font-bold text-gray-100">{value}</p>
     </div>
-  )
+  );
 }

@@ -4,6 +4,7 @@ import { useAnalyticsStore } from "@/store/analyticsStore";
 import { useAuthStore } from "@/store/authStore";
 import { useExpenseStore } from "@/store/expenseStore";
 import { Expense } from "@/types";
+import { useNavigate } from "@tanstack/react-router";
 import { Calendar, DollarSign, Package, Plus, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -43,6 +44,8 @@ export default function DashboardPage() {
     undefined,
   );
 
+  const navigate = useNavigate();
+
   function handleAddExpense() {
     setIsModalOpen(true);
     setEditingExpense(undefined);
@@ -50,6 +53,18 @@ export default function DashboardPage() {
   function handleCloseModal() {
     setEditingExpense(undefined);
     setIsModalOpen(false);
+  }
+
+  function handleMonthClick() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const startDate = `${year}-${month}-01`;
+    const lastDay = new Date(year, parseInt(month), 0).getDate();
+    const endDate = `${year}-${month}-${lastDay.toString().padStart(2, "0")}`;
+
+    setDateRange(startDate, endDate);
+    navigate({to: "/expenses"})
   }
   if (!analyticsLoading && expenses.length === 0) {
     return (
@@ -128,6 +143,7 @@ export default function DashboardPage() {
               icon={Calendar}
               label="This Month"
               value={`$${dashboardStats.currentMonthTotal.toFixed(2)}`}
+              onClick={handleMonthClick}
             />
           </>
         )}
