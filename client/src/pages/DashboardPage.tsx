@@ -84,21 +84,29 @@ export default function DashboardPage() {
     );
   }
 
+  if (!analyticsLoading && !dashboardStats) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-gray-400 text-lg">Loading dashboard...</p>
+      </div>
+    );
+  }
+
   return (
-    <main>
-      <div>
+    <main className="bg-slate-950 px-4 py-8 sm:px-8 sm:py-12">
+      <div className="border-b border-purple-950 pb-4 mb-8 flex flex-col gap-8 justify-start sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1>Welcome back, {user?.name}</h1>
-          <p>Here's your financial overview</p>
+          <h1 className="text-3xl font-bold text-gray-100 mb-4">Welcome back, {user?.name}</h1>
+          <p className="text-gray-400 mt-1">Here's your financial overview</p>
         </div>
 
-        <button onClick={handleAddExpense}>
-          <Plus />
+        <button onClick={handleAddExpense} className="flex items-center justify-center gap-2 px-6 py-3 bg-purple-950 text-gray-100 rounded-sm hover:bg-purple-800 transition font-medium">
+          <Plus className="size-5" />
           Add Expense
         </button>
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {dashboardStats && (
           <>
             <StatsCard
