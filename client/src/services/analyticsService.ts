@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/types"
-import { CategoryTotal, DashboardStats, MonthlyTotal, SpendingTrend } from "@/types/analytics.types"
+import { CategoryTotal, DashboardStats, MonthlyTotal, PeriodStats, SpendingTrend } from "@/types/analytics.types"
 import api from "./api";
 
 export const getDashboardStats = async () => {

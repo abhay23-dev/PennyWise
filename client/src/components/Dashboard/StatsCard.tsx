@@ -4,7 +4,7 @@ interface StatsCardProps {
   icon: LucideIcon;
   label: string;
   value: string | number;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export default function StatsCard({

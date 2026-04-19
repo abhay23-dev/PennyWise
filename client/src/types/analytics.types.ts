@@ -37,6 +37,7 @@ export interface AnalyticsState {
   monthlyData: MonthlyTotal[];
   dashboardStats: DashboardStats | null;
   trends: SpendingTrend[];
+  periodData: CategoryTotal[];
   isLoading: boolean;
   error: string | null;
 }

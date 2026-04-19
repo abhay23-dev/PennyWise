@@ -1,5 +1,7 @@
+import DateRangeSelector from "@/components/Dashboard/DateRangeSelector";
 import StatsCard from "@/components/Dashboard/StatsCard";
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
+import { getPeriodStats } from "@/services/analyticsService";
 import { useAnalyticsStore } from "@/store/analyticsStore";
 import { useAuthStore } from "@/store/authStore";
 import { useExpenseStore } from "@/store/expenseStore";
@@ -40,9 +42,8 @@ export default function DashboardPage() {
   }, [getDashboardStats, getCategoryStats, getTrends, expenses.length]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExpense, setEditingExpense] = useState<Expense | undefined>(
-    undefined,
-  );
+  const [editingExpense, setEditingExpense] = useState<Expense | undefined>(undefined);
+  const [selectedRange, setSelectedRange] = useState("180");
 
   const navigate = useNavigate();
 
@@ -66,7 +67,19 @@ export default function DashboardPage() {
     setDateRange(startDate, endDate);
     navigate({to: "/expenses"})
   }
-  if (!analyticsLoading && expenses.length === 0) {
+
+  function handleDateRangeChange(range: string) {
+    setSelectedRange(range);
+
+    if(range === "all") {
+      getCategoryStats();
+    } else {
+      const days = parseFloat(range);
+      getPeriodStats(days);
+    }
+  }
+  const isLoading = analyticsLoading || expenseLoading;
+  if (!isLoading && expenses.length === 0) {
     return (
       <main className="bg-slate-950 p-4 sm:px-8 sm:py-12">
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
@@ -99,7 +112,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!analyticsLoading && !dashboardStats) {
+  if (!isLoading && !dashboardStats) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <p className="text-gray-400 text-lg">Loading dashboard...</p>
@@ -147,6 +160,10 @@ export default function DashboardPage() {
             />
           </>
         )}
+      </div>
+
+      <div>
+        <DateRangeSelector selected={selectedRange} onChange={handleDateRangeChange} />
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 import { AnalyticsState } from "@/types/analytics.types";
 import { create } from "zustand";
-import { getDashboardStats as getDashboardStatsService, getMonthlyTotals as getMonthlyTotalsService, getCategoryStats as getCategoryStatsService, getTrends as getTrendsService } from "@/services/analyticsService";
+import { getDashboardStats as getDashboardStatsService, getMonthlyTotals as getMonthlyTotalsService, getCategoryStats as getCategoryStatsService, getTrends as getTrendsService, getPeriodStats as getPeriodStatsService } from "@/services/analyticsService";
 import { AxiosError } from "axios";
 
 interface AnalyticsStore extends AnalyticsState {
@@ -8,6 +8,7 @@ interface AnalyticsStore extends AnalyticsState {
   getMonthlyTotals: () => Promise<void>;
   getCategoryStats: () => Promise<void>;
   getTrends: () => Promise<void>;
+  getPeriodStats: (days: number) => Promise<void>
   clearError: () => void;
 }
 
@@ -16,6 +17,8 @@ export const useAnalyticsStore = create<AnalyticsStore>((set) => ({
   monthlyData: [],
   dashboardStats: null,
   trends: [],
+  periodData: [],
+
   isLoading: false,
   error: null,
 
@@ -99,6 +102,29 @@ export const useAnalyticsStore = create<AnalyticsStore>((set) => ({
       if(response.data) {
         set({
           trends: response.data,
+          isLoading: false,
+          error: null
+        });
+      }
+    } catch(error) {
+      const err = error as AxiosError<{error: string}>;
+      set({
+        error: err.response?.data?.error,
+        isLoading: false
+      })
+    }
+  },
+  getPeriodStats: async (days: number) => {
+    set({
+      isLoading: true,
+      error: null,
+    })
+
+    try {
+      const response = await getPeriodStatsService(days);
+      if(response.data) {
+        set({
+          periodData: response.data.categories,
           isLoading: false,
           error: null
         });
