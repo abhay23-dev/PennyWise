@@ -124,7 +124,7 @@ export const useAnalyticsStore = create<AnalyticsStore>((set) => ({
       const response = await getPeriodStatsService(days);
       if(response.data) {
         set({
-          periodData: response.data.categories,
+          periodData: response.data,
           isLoading: false,
           error: null
         });

@@ -1,7 +1,7 @@
+import CategoryPieChart from "@/components/Dashboard/CategoryPieChart";
 import DateRangeSelector from "@/components/Dashboard/DateRangeSelector";
 import StatsCard from "@/components/Dashboard/StatsCard";
 import ExpenseModal from "@/components/Expenses/ExpenseModal";
-import { getPeriodStats } from "@/services/analyticsService";
 import { useAnalyticsStore } from "@/store/analyticsStore";
 import { useAuthStore } from "@/store/authStore";
 import { useExpenseStore } from "@/store/expenseStore";
@@ -14,12 +14,14 @@ export default function DashboardPage() {
   const {
     dashboardStats,
     categoryData,
+    periodData,
     trends,
     isLoading: analyticsLoading,
     error,
     getCategoryStats,
     getDashboardStats,
     getTrends,
+    getPeriodStats
   } = useAnalyticsStore();
 
   const { user } = useAuthStore();
@@ -44,6 +46,13 @@ export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | undefined>(undefined);
   const [selectedRange, setSelectedRange] = useState("180");
+
+  useEffect(() => {
+    if(selectedRange !== "all") {
+      const days = parseFloat(selectedRange);
+      getPeriodStats(days);
+    }
+  }, [selectedRange, getPeriodStats]);
 
   const navigate = useNavigate();
 
@@ -79,6 +88,7 @@ export default function DashboardPage() {
     }
   }
   const isLoading = analyticsLoading || expenseLoading;
+  const chartData = selectedRange === "all" ? categoryData : periodData;
   if (!isLoading && expenses.length === 0) {
     return (
       <main className="bg-slate-950 p-4 sm:px-8 sm:py-12">
@@ -164,6 +174,20 @@ export default function DashboardPage() {
 
       <div>
         <DateRangeSelector selected={selectedRange} onChange={handleDateRangeChange} />
+      </div>
+
+      <div>
+        {
+          chartData.length > 0 && (
+            <CategoryPieChart data={chartData} selectedPeriod={selectedRange}  />
+          )
+        }
+
+        {
+          // trends.length > 0 && (
+          //   // <TrendLineChart data={trends} />
+          // )
+        }
       </div>
     </main>
   );
