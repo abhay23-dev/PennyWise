@@ -184,9 +184,9 @@ export default function DashboardPage() {
         }
 
         {
-          // trends.length > 0 && (
-          //   // <TrendLineChart data={trends} />
-          // )
+          trends.length > 0 && (
+            <TrendLineChart data={trends} />
+          )
         }
       </div>
     </main>

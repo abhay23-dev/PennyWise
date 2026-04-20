@@ -2,6 +2,7 @@ import { useExpenseStore } from "@/store/expenseStore";
 import { CategoryTotal } from "@/types/analytics.types";
 import { getCategoryConfig } from "@/types/CategoryConfig";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 interface CategoryPieChartProps {
@@ -100,6 +101,18 @@ export default function CategoryPieChart({
 
   const navigate = useNavigate();
 
+  const [showLabels, setShowLabels] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setShowLabels(window.innerWidth >= 640);
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   function handleSliceClick(entry: CategoryTotal) {
     setCategory(entry.category);
 
@@ -140,7 +153,11 @@ export default function CategoryPieChart({
             nameKey="category"
             data={chartData}
             outerRadius={120}
-            label={(entry) => `${(entry.percent! * 100).toFixed(1)}%`}
+            label={
+              showLabels
+              ? (entry) => `${(entry.percent! *100).toFixed(1)}`
+              : false
+            }
             onClick={handleSliceClick}
             className="cursor-pointer"
           >
